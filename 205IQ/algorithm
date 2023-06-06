@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+
+parser = load_source('parser', './parser').parser
+utils = load_source('utils', './utils').utils
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        objs:list = parser_obj.get_parced_data()
+        this.u:int = objs[0]
+        this.s:int = objs[1]
+        this.iq1:int = objs[2]
+        this.iq2:int = objs[3]
+        this.mode:int = objs[4]
+        this.values:list = []
+        for i in range(this.iq1, this.iq2):
+            this.values.append(utils.GetCalcPrim(this.u, this.s, i))
+
+
+    def __basic(this) -> str:
+        res:str = ""
+        for i in range(len(this.values)):
+            res += str(i) + " "+ "{:.5f}".format(this.values[i]) + "\n"
+        res = res[:-1]
+        return res
+
+    def __min(this) -> str:
+        res:str = ""
+        num:float = utils.GetPercent(this.u, this.s, this.iq1)
+        res += "{:.1f}% ".format(num) + "of people have an IQ inferior to " + str(this.iq1)
+        return res
+
+    def __min_max(this) -> str:
+        res:str = ""
+        num:float = utils.GetPercent(this.u, this.s, this.iq2, this.iq1)
+        res += "{:.1f}% ".format(num) + "of people have an IQ between " + str(this.iq1) + " and " + str(this.iq2)
+        return res
+
+    def __str__(this) -> str:
+        if (this.mode == 0):
+            return this.__basic()
+        if (this.mode == 1):
+            return this.__min()
+        if (this.mode == 2):
+            return this.__min_max()
+        return ""

@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+
+from math import sqrt
+from typing import Callable as Call
+
+class utils:
+    def get_coef(years:list, data:list, fit:int) -> float:
+        if fit == 1:
+            return utils.get_linear_cov(years, data) / utils.get_linear_var(years)
+        else :
+            return utils.get_linear_cov(years, data) / utils.get_linear_var(data)
+
+    def calc_avg(data:list) -> float:
+        result:float = 0.0
+
+        for i in range(len(data)):
+            result += float(data[i])
+        return result / len(data) # len should be 58
+
+    def get_linear_var(data:list) -> float:
+        m:float = utils.calc_avg(data)
+        res:float = 0.0
+
+        for i in range(len(data)):
+            res += (float(data[i]) - m) ** 2
+        return float(res / len(data)) # len should be 58
+
+    def calc_covage_num(years:list, data:list) -> float:
+        res:float = 0.0
+
+        for i in range(len(years)):
+            res += years[i] * data[i]
+        return res
+
+    def get_linear_cov(years:list, data:list) -> float:
+        num:float = utils.calc_covage_num(years, data)
+        avg_dup:float = utils.calc_avg(years) * utils.calc_avg(data)
+
+        return float((num / len(years)) - avg_dup)
+
+    def get_linear_B(years:list, data:list, coef:float, fit:int) -> float:
+        if fit == 1:
+            return utils.calc_avg(data) - coef * utils.calc_avg(years)
+        else :
+            return utils.calc_avg(years) - coef * utils.calc_avg(data)
+
+    def get_root_mean_square_devination(years:list, data:list, coef:float, B:float,
+                                    calc_func:Call[[int, float, float], float]) -> float:
+        res:float = 0.0
+        y:float = 0.0
+
+        for i in range(len(years)):
+            y = calc_func(years[i], B, coef)
+            res += (y - float(data[i])) ** 2 / len(years)
+        return sqrt(res)

@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import sys
+
+class parser:
+    def __init__(this, parce:bool = False):
+        this.dice = []
+        this.combination = None
+        if parce:
+            this.parse()
+
+    def __get_number(this, char: str) -> int:
+        try:
+            nbr = int(char)
+        except:
+            raise Exception("the dice's result should only be between 1 and 6 (0 if not thrown)\n")
+        if nbr > 6 or nbr < 0:
+            raise Exception("Cant roll that high/low\n")
+        return nbr
+
+    def __get_combination(this, string: str) -> tuple:
+        combination_type = {
+            "pair": 2,
+            "three": 2,
+            "four": 2,
+            "full": 3,
+            "straight": 2,
+            "yams": 2
+        }
+        tmp = string.split("_")
+        length = len(tmp)
+
+        if length != combination_type.get(tmp[0]):
+            raise Exception("Invalid combination\n")
+        find = int(tmp[1])
+        if find > 6 or find < 1:
+            raise Exception("Invalid combination\n")
+        if length == 3:
+            find2 = int(tmp[2])
+            if find2 > 6 or find2 < 1:
+                raise Exception("Invalid combination\n")
+            return (tmp[0], find, find2)
+        return (tmp[0], find)
+
+    def parse(this) -> tuple:
+        d1 = this.__get_number(sys.argv[1])
+        d2 = this.__get_number(sys.argv[2])
+        d3 = this.__get_number(sys.argv[3])
+        d4 = this.__get_number(sys.argv[4])
+        d5 = this.__get_number(sys.argv[5])
+        this.combination:tuple = this.__get_combination(sys.argv[6])
+        this.dice = [d1, d2, d3, d4, d5]
+    def get_dice(this):
+        return this.dice
+    def get_combination(this):
+        return this.combination
+

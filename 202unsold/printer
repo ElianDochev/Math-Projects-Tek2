@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+
+class printer:
+    def __init__(this):
+        this.sum_law_var = []
+        this.expX_var = 0.0
+        this.expY_var = 0.0
+        this.TotalX_var = 0.0
+        this.TotalY_var = 0.0
+
+    def append_sum_law(this, sum):
+        this.sum_law_var.append(sum)
+
+    def fill_others(this, expX, expY, TotalX, TotalY):
+        this.expX_var = expX
+        this.expY_var = expY
+        this.TotalX_var = TotalX
+        this.TotalY_var = TotalY
+    def __print_law(this) :
+        print("z\t20\t30\t40\t50\t60\t70\t80\t90\t100\np(Z=z)", end='')
+        for sum in this.sum_law_var:
+            print("\t%0.3f" %(sum), end='')
+
+    def __print_variance(this):
+        print("expected value of X:\t" + "%0.1f" %(this.TotalX_var))
+        print("variance of X:\t\t" + "%0.1f" %(this.expX_var))
+        print("expected value of Y:\t" + "%0.1f" %(this.TotalY_var))
+        print("variance of Y:\t\t" + "%0.1f" %(this.expY_var))
+        print("expected value of Z:\t" + "%0.1f" %(this.TotalX_var + this.TotalY_var))
+        print("variance of Z:\t\t" + "%0.1f" %(this.expX_var + this.expY_var))
+
+    def __str__(this):
+        print("-" * 80)
+        this.__print_law()
+        print("\n", "-" * 80)
+        this.__print_variance()
+        print("-" * 80)
+        return ""

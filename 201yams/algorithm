@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+import math
+
+utils = load_source('utils', './utils').utils
+parser = load_source('parser', './parser').parser
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        this.dice = parser_obj.get_dice()
+        combination = parser_obj.get_combination()
+        this.combination_type, this.find, this.find2 = combination + (0,) * (3 - len(combination))
+        this.probability:float = 0
+        display = {
+            "pair": "pair",
+            "three": "three-of-a-kind",
+            "four": "four-of-a-kind",
+            "full": "full",
+            "straight": "straight",
+            "yams": "yams"
+        }
+        this.combination_display = display.get(this.combination_type)
+
+    def compute(this):
+        # print(this.dice) # debug
+        # print(this.combination_type) # debug
+        # print(this.find) # debug
+        # print(this.find2) # debug
+        combination = {
+            "pair": lambda: this.__do_result(2),
+            "three": lambda: this.__do_result(3),
+            "four": lambda: this.__do_result(4),
+            "full": this.__do_full,
+            "straight": this.__do_straight,
+            "yams": lambda: this.__do_result(5)
+        }
+        combination.get(this.combination_type)()
+
+    def __do_result(this, dice_num:int) -> None:
+        result = 0.0
+        apparition = utils.get_apparition(this.dice, this.find)
+        if dice_num < apparition:
+            result = 1
+        else:
+            for n in range(dice_num - apparition, 6 - apparition):
+                result += utils.get_binomial(5 - apparition, n)
+        this.probability = result * 100
+
+    def __do_straight(this) -> None:
+        if this.find == 1 or this.find == 4:
+            raise Exception("Invalid combination\n")
+        tab = set(this.dice)
+        if len(tab) == 1:
+            tab.add(0)
+        pres = 6
+        if tab.issuperset([this.find]):
+            pres = 5
+        result = math.factorial(pres - int(len(tab))) / pow(6, pres - int(len(tab)))
+        this.probability = result * 100
+
+    def __do_full(this) -> None:
+        if this.find == this.find2:
+            raise Exception("Invalid combination\n")
+        result = 1.0
+        apparition1 = utils.get_apparition(this.dice, this.find)
+        apparition2 = utils.get_apparition(this.dice, this.find2)
+        if (apparition1 > 3):
+            apparition1 = 3
+        if (apparition2 > 2):
+            apparition2 = 2
+        for n in range(5 - apparition1 - apparition2, 6 - apparition1 - apparition2):
+            result *= utils.get_binomial(5 - apparition1 - apparition2, n)
+        if result > 0.1:
+            result = 0.1
+        this.probability = result * 1000
+
+    def __str__(this):
+        return f"Chances to get a {this.find} {this.combination_display}{this.find2 != 0 and f' of {this.find2}' or ''}: {this.probability:.2f}%"
+

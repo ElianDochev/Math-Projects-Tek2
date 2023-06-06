@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+
+parser = load_source('parser', './parser').parser
+utils = load_source('utils', './utils').utils
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        objs:list = parser_obj.get_parced_data()
+        this.ma:float = 0.0
+        this.n = objs[0]
+        this.a = objs[1]
+        this.h = objs[2]
+        this.sd = objs[3]
+
+    def __compute(this):
+        tmpSum:float = this.a * (this.n - 1)
+        this.a = (tmpSum + this.ma) / this.n
+        this.sd:float = utils.sqrt(((this.sum + (this.ma ** 2)) / this.n) - (this.a ** 2))
+        this.h = this.n / ((1 / this.ma) + ((this.n - 1) / this.h))
+
+    def __print(this) -> None:
+        print("\t%s %d" % ("Number of values:".ljust(19), this.n))
+        print("\t%s %.2f" %("Standard deviation:".ljust(19), round(this.sd, 2)))
+        print("\t%s %.2f" %("Arithmetic mean:".ljust(19), round(this.a, 2)))
+        print("\t%s %.2f" %("Root mean square:".ljust(19), round(this.tmp, 2)))
+        print("\t%s %.2f\n" %("Harmonic mean:".ljust(19), round(this.h, 2)))
+
+    def listening(this) -> None:
+        while (True):
+            input_value = input("Enter next value: ")
+            if (input_value == "END"):
+                break
+            try:
+                this.ma = float(input_value)
+                if (this.ma < 0):
+                    raise Exception("Negative input")
+            except:
+                raise Exception("Invalid input")
+            this.sum = (this.sd ** 2 + this.a ** 2) * this.n
+            this.sum = round(this.sum, 2)
+            this.ma = round(this.ma, 2)
+            this.n += 1
+            this.tmp:float = utils.compute_mean_square(this.sum, this.ma, this.n)
+            this.__compute()
+            this.__print()

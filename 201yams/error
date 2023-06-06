@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import sys
+import traceback
+
+class error:
+    def check():
+        if  len (sys.argv) == 2:
+            if sys.argv[1] == "-h":
+                error.help()
+                return 0
+        if len(sys.argv) != 7:
+            raise Exception("Error: invalid number of arguments")
+
+    def help():
+        print("USAGE")
+        print("\t./201yams d1 d2 d3 d4 d5 c\n")
+        print("DESCRIPTION")
+        print("\td1\tvalue of the first die (0 if not thrown)")
+        print("\td2\tvalue of the second die (0 if not thrown)")
+        print("\td3\tvalue of the third die (0 if not thrown)")
+        print("\td4\tvalue of the fourth die (0 if not thrown)")
+        print("\td5\tvalue of the fifth die (0 if not thrown)")
+        print("\tc\texpected combination")
+
+    def debug(e):
+        print(e, file=sys.stderr) # print the error
+        traceback.print_exc() # where it broke
+

@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import sys
+
+class parser:
+    def __init__(this, parce:bool = False):
+        this.n = None
+        this.k = None
+        if (parce):
+            this.parse()
+
+    def parse(this):
+        if (len(sys.argv) == 2):
+            try:
+                this.n = int(sys.argv[1])
+                this.k = None
+            except:
+                raise Exception("Invalid args must be ints")
+        elif (len(sys.argv) == 3):
+            try:
+                this.n = int(sys.argv[1])
+                this.k = int(sys.argv[2])
+            except:
+                raise Exception("Invalid args must be ints")
+        else:
+            raise Exception("Invalid number or args")
+        if (this.n < 0 or (this.k != None and this.k < 0)):
+            raise Exception("Invalid args must be positive")
+        if (this.k != None and this.k > this.n):
+            raise Exception("Invalid args k must be inferior to n")
+
+    def get_parced_data(this):
+        return this.n, this.k
+

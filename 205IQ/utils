@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+
+from math import sqrt, exp, pi
+
+class utils:
+    def GetCalcPrim(u:int, s:int , index:int) -> float:
+        return exp(-pow(index - u, 2) / (2 * pow(s, 2))) / (s * sqrt(2 * pi))
+
+    def GetPercent(u:int, s:int, end:int, start:int = 0) ->float:
+        i:float = start
+        res:float = 0
+        while (i < end):
+            res += utils.GetCalcPrim(u, s, i)
+            i += 0.01
+        return res

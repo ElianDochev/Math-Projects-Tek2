@@ -1,0 +1,8 @@
+#!/usr/bin/env python3
+
+import math
+
+class utils:
+    def get_result(x, y, a, b) -> float:
+        result = ((a - x) * (b - y)) / ((5 * a - 150) * (5 * b - 150))
+        return result

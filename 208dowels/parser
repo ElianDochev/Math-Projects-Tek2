@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+import sys
+
+class parser:
+    def __init__(this, parce:bool = False):
+        this.numeric_args = []
+        if (parce):
+            this.parse()
+
+    def __print_help(this) -> None:
+        print("USAGE")
+        print("\t/208dowels O0 O1 O2 O3 O4 O5 O6 O7 O8\n")
+        print("DESCRIPTION")
+        print("\tOi\tsize of the observed class")
+
+    def parse(this) -> None:
+        if (len(sys.argv) == 2 or len(sys.argv) == 10):
+            if (sys.argv[1] == "-h"):
+                this.__print_help()
+                exit(0)
+            else:
+                sum: int = 0
+                for i in range(1, len(sys.argv)):
+                    if (not sys.argv[i].isnumeric()):
+                        this.__print_help()
+                        raise Exception("Arguments must be positive integers")
+                    this.numeric_args.append(int(sys.argv[i]))
+                    sum += int(sys.argv[i])
+                if (sum != 100):
+                    this.__print_help()
+                    raise Exception("Arguments' sum must be equal to 100")
+        else:
+            this.__print_help()
+            raise Exception("Invalid number of arguments")
+
+    def get_parced_data(this) -> list:
+        return this.numeric_args
+

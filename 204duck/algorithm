@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+
+parser = load_source('parser', './parser').parser
+utils = load_source('utils', './utils').utils
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        this.a:float = parser_obj.get_parced_data()
+        this.time:float = utils.GetAverageTime(this.a)
+        this.deviation:float = utils.GetVariance(this.a)
+        this.time_50:list = utils.ParceTime(this.__getTimePercentage(0.5))
+        this.time_99:list = utils.ParceTime(this.__getTimePercentage(0.99))
+        this.percentage_1:float = this.__getPercentage(1)
+        this.percentage_2:float = this.__getPercentage(2)
+
+    def __getTimePercentage(this, step:float) -> float:
+        t:float = 0
+        res:float = 0
+        while res < step:
+            res = utils.GetCalcPrim(this.a, t / 60)
+            t += 0.01
+        return t
+
+    # gets the percentage of the returned after step minutes (1.0 is 1 minute)
+    def __getPercentage(this, step:float) -> float:
+        t:float = 0
+        res:float = 0
+        while t < step:
+            res = utils.GetCalcPrim(this.a, t)
+            t += 0.01
+        return res * 100
+
+    # the time sometines do 0 60s instead of 1m 0s and and it does 0 3s instead of 0 03s
+    def __str__(this):
+        time_str = f"{(this.time[0])}m {int(round(this.time[1])):02d}s"
+        time_50_str = f"{this.time_50[0]}m {int(this.time_50[1]):02d}s"
+        time_99_str = f"{this.time_99[0]}m {int(this.time_99[1]):02d}s"
+
+        return f"Average return time: {time_str}\n" \
+            f"Standard deviation: {round(this.deviation, 3)}\n" \
+            f"Time after which 50% of the ducks are back: {time_50_str}\n" \
+            f"Time after which 99% of the ducks are back: {time_99_str}\n" \
+            f"Percentage of ducks back after 1 minute: {round(this.percentage_1, 1)}%\n" \
+            f"Percentage of ducks back after 2 minutes: {round(this.percentage_2, 1)}%"
+
+

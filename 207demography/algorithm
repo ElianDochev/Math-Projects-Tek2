@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+from math import sqrt
+
+parser = load_source('parser', './parser').parser
+utils = load_source('utils', './utils').utils
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        data:list = parser_obj.get_parced_data()
+        this.contries:list = data[0]
+        this.years:list = data[1]
+        this.data:list = data[2]
+        this.mul:int = 10 ** 6
+
+    def __get_fit1(this) -> None:
+        coef:float = utils.get_coef(this.years, this.data, 1)
+        B:float = utils.get_linear_B(this.years, this.data, coef, 1)
+
+        if B < 0:
+            print("    Y = %.2f X - %.2f" % ((coef / this.mul), abs(B / this.mul)))
+        else:
+            print("    Y = %.2f X + %.2f" % (coef / this.mul, B / this.mul))
+        print("    Root-mean-square deviation: %.2f" % (utils.get_root_mean_square_devination(this.years, this.data, coef, B,
+                                                                                            lambda x, B, coef: coef * x + B) / this.mul))
+        print("    Population in 2050: %.2f" % ((coef / this.mul) * 2050 + (B / this.mul)))
+
+    def __get_fit2(this) -> None:
+        coef:float = utils.get_coef(this.years, this.data, 2)
+        B:float = utils.get_linear_B(this.years, this.data, coef, 2)
+
+        if B < 0:
+            print("    X = %.2f Y - %.2f" % ((coef * this.mul), abs(B)))
+        else:
+            print("    X = %.2f Y + %.2f" % (coef * this.mul, B))
+        print("    Root-mean-square deviation: %.2f" % (utils.get_root_mean_square_devination(this.years, this.data, coef, B,
+                                                                                            lambda x, B, coef: (x - B) / coef) / this.mul))
+        print("    Population in 2050: %.2f" % ((2050 - B) / (coef * this.mul)))
+
+    def __get_correlation(this) -> None:
+        coefX:float = utils.get_coef(this.years, this.data, 1)
+        coefY:float = utils.get_coef(this.data, this.years, 1)
+        res:float = sqrt(coefX * coefY)
+
+        print("Correlation: %.4f" % res)
+
+    def __str__(this):
+        print("Country:", end=" ")
+        for i in range(len(this.contries)):
+            print(this.contries[i], end="")
+            if i != len(this.contries) - 1:
+                print(", ", end="")
+        print("\n", end="")
+        print("Fit1")
+        this.__get_fit1()
+        print("Fit2")
+        this.__get_fit2()
+        this.__get_correlation()
+        return ""

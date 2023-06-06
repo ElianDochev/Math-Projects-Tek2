@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+from math import exp, factorial
+
+parser = load_source('parser', './parser').parser
+utils = load_source('utils', './utils').utils
+
+class algorithm:
+    def __init__(this):
+        parser_obj = parser(True)
+        this.n, this.k = parser_obj.get_parced_data()
+        this.res = 0.0
+
+    def __str__(this):
+        if (this.k != None):
+            this.res = utils.my_comb(int(this.n), int(this.k))
+            return str(str(this.k) + "-combination of a set of size " + str(this.n) + ":\n" + ("%.d\n" % this.res))
+        else:
+            this.n = this.n / (8 * 3600) # convert to days
+            temp_values, temp_time = utils.build_values(lambda i:
+                                    utils.loop_value(3500, i) * pow(this.n, i) * pow((1 - this.n), 3500 - i))
+            utils.print_type_values(temp_values, "Binomial", temp_time)
+            print()
+            temp_values, temp_time = utils.build_values(lambda i:
+                                    (exp(-3500 * this.n) * pow(3500 * this.n, i)) / factorial(i))
+            utils.print_type_values(temp_values, "Poisson", temp_time)
+            return ""

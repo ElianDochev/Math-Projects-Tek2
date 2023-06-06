@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+from imp import load_source
+
+
+parser = load_source('parser', './parser').parser
+algorithm = load_source('algorithm', './algorithm').algorithm
+error = load_source('error', './error').error
+
+def main():
+    try: # if anything breaks exit 84
+        error.check() # checks if the input is valid
+        main = algorithm() # parces and inits the class
+        print(main, end='') # computes the program and prints the results
+    except Exception as e:
+        error.debug(e) # prints the debug info
+        exit (84)
+if __name__ == "__main__":
+    main()

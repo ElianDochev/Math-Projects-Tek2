@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+import sys
+from imp import load_source
+
+utils = load_source('utils', './utils').utils
+
+class parser:
+    def __init__(this, parce:bool = False):
+        this.a = 0
+        this.b = 0
+        this.tab = []
+        if parce:
+            this.parse()
+
+    def __get_number(this, char: str) -> int:
+        try:
+            nbr = int(char)
+        except:
+            raise Exception("INVALID NUMBER\n")
+        if nbr <= 50:
+            raise Exception("NUMBER OUT OF RANGE\n")
+        return nbr
+
+    def __get_tab(this) -> None:
+        tab = [[float(utils.get_result((x + 1) * 10, (y + 1) * 10, this.a, this.b))
+                for x in range(5)] for y in range(5)]
+        this.tab = tab
+
+    def parse(this) -> None:
+        this.a = this.__get_number(sys.argv[1])
+        this.b = this.__get_number(sys.argv[2])
+        this.__get_tab()
+
+    def get_parced_data(this) -> tuple:
+        return (this.a, this.b, this.tab)
+
